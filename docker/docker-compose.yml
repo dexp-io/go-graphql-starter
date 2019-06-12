@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  server:
+    build: ./
+    container_name: dexp_server
+    restart: always
+    image: dexp
+    ports:
+      - 8080:8080
+    links:
+      - mysql
+    environment:
+      - "PORT=8080"
+      - "MYSQL_URL=root:root@tcp(mysql:3306)/dexp?parseTime=true&sql_mode=ansi"
+      - "REDIS_URL=localhost:6379"
+
+  mysql:
+    container_name: dexp_mysql
+    restart: always
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: 'dexp'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'

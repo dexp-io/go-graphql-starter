@@ -1,0 +1,105 @@
+type SystemLog{
+    id: ID!
+    type: String!
+    message: String!
+    user_id: ID!
+    read: Boolean!
+    created_at: Time!
+}
+
+type User{
+    id: ID!
+    first_name: String!
+    last_name: String!
+    avatar: String!
+    email: String!
+    password: String!
+    phone: String!
+    address: String!
+    is_online: Boolean!
+    verified: Boolean!
+    created_at: Time!
+    updated_at: Time!
+}
+
+interface Entity{
+    id: ID!
+    type: String!
+    author_id: ID!
+    status: Int!
+    created_at: Time!
+    updated_at: Time!
+}
+
+type Project implements Entity{
+    id: ID!
+    type: String!
+    author_id: ID!
+    status: Int!
+    created_at: Time!
+    updated_at: Time!
+    title: String!
+    body: String!
+}
+
+type Board implements Entity{
+    id: ID!
+    type: String!
+    author_id: ID!
+    status: Int!
+    created_at: Time!
+    updated_at: Time!
+    project_id: Int!
+    title: String!
+    weight: Int!
+}
+
+type Token {
+    token: String!
+    user: User!
+    expired_at: Time!
+}
+
+input Filter{
+    search: String
+    order_by: String
+    limit: Int!
+    offset: Int!
+}
+
+
+type Query {
+    users(filter: Filter!): [User] @hasRole(role: [administrator])
+}
+
+input NewUser {
+    first_name: String!
+    last_name: String!
+    email: String!
+    password: String!
+    phone: String!
+    address: String!
+}
+
+input UpdateUser{
+    first_name: String
+    last_name: String
+    email: String
+}
+
+type Mutation {
+    createUser(input: NewUser!): User!
+    updateUser(id: Int!, input: UpdateUser!): User!
+    login(email: String!, password: String!): Token!
+    logout: Boolean!
+
+}
+
+directive @hasRole(role: [UserRole]!) on FIELD_DEFINITION
+
+enum UserRole {
+    administrator
+    authenticated
+}
+
+scalar Time

@@ -1,0 +1,147 @@
+package dexp
+
+import (
+	"context"
+	"time"
+) // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
+
+type Resolver struct{}
+
+func (r *Resolver) Board() BoardResolver {
+	return &boardResolver{r}
+}
+func (r *Resolver) Mutation() MutationResolver {
+	return &mutationResolver{r}
+}
+func (r *Resolver) Project() ProjectResolver {
+	return &projectResolver{r}
+}
+
+func (r *Resolver) Query() QueryResolver {
+	return &queryResolver{r}
+}
+func (r *Resolver) User() UserResolver {
+	return &userResolver{r}
+}
+
+type boardResolver struct{ *Resolver }
+
+func (r *boardResolver) ID(ctx context.Context, obj *Board) (int, error) {
+	return int(obj.ID), nil
+}
+func (r *boardResolver) AuthorID(ctx context.Context, obj *Board) (int, error) {
+
+	return int(obj.AuthorID), nil
+}
+func (r *boardResolver) Status(ctx context.Context, obj *Board) (int, error) {
+
+	return int(obj.Status), nil
+}
+
+type mutationResolver struct{ *Resolver }
+
+func (r *mutationResolver) UpdateUser(ctx context.Context, id int, input map[string]interface{}) (*User, error) {
+
+	result, err := DB.Update("user").Fields(input).Condition("id", id, "=").Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	count, err := result.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+
+	if count > 0 {
+		return nil, nil
+	}
+
+	return nil, nil
+}
+
+func (r *mutationResolver) Logout(ctx context.Context) (bool, error) {
+
+	auth := GetAuthFromContext(ctx)
+
+	if auth.UserID > 0 {
+		err := Logout(auth.Token)
+
+		if err != nil {
+			return false, err
+		}
+
+		return true, nil
+	}
+
+	return false, nil
+
+}
+
+func (r *mutationResolver) Login(ctx context.Context, email string, password string) (*Token, error) {
+
+	user, err := Login(email, password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	expiredAt := time.Now().Add(time.Second * 3600 * 24 * 7)
+	token := &Token{
+		Token:     JwtCreate(user.ID, expiredAt.Unix()),
+		User:      user,
+		ExpiredAt: expiredAt,
+	}
+
+	return token, nil
+}
+
+func (r *mutationResolver) CreateUser(ctx context.Context, input NewUser) (*User, error) {
+	pass, err := HashPassword(input.Password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	u := &User{
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+		Email:     input.Email,
+		Password:  pass,
+		Phone:     input.Phone,
+		Address:   input.Address,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	err = u.Insert()
+
+	return u, err
+}
+
+type projectResolver struct{ *Resolver }
+
+func (r *projectResolver) ID(ctx context.Context, obj *Project) (int, error) {
+	return int(obj.ID), nil
+}
+
+func (r *projectResolver) AuthorID(ctx context.Context, obj *Project) (int, error) {
+	return int(obj.AuthorID), nil
+}
+func (r *projectResolver) Status(ctx context.Context, obj *Project) (int, error) {
+
+	return int(obj.Status), nil
+}
+
+type queryResolver struct{ *Resolver }
+
+func (queryResolver) Users(ctx context.Context, filter Filter) ([]*User, error) {
+
+	return FindUsers().Execute()
+}
+
+type userResolver struct{ *Resolver }
+
+func (r *userResolver) ID(ctx context.Context, obj *User) (int, error) {
+	return int(obj.ID), nil
+}

@@ -1,0 +1,21 @@
+schema:
+  - schema.graphql
+exec:
+  filename: graphql_generated.go
+model:
+  filename: graphql_models.go
+resolver:
+  filename: resolver.go
+  type: Resolver
+models:
+  ID:
+    model:
+      github.com/99designs/gqlgen/graphql.IntID
+  User:
+    model: github.com/drupalexp/dexp.User
+  Project:
+    model: github.com/drupalexp/dexp.Project
+  Board:
+    model: github.com/drupalexp/dexp.Board
+  UpdateUser:
+    model: "map[string]interface{}"

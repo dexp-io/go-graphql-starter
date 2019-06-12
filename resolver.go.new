@@ -1,0 +1,74 @@
+package dexp
+
+import (
+	"context"
+) // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
+
+type Resolver struct{}
+
+func (r *Resolver) Board() BoardResolver {
+	return &boardResolver{r}
+}
+func (r *Resolver) Mutation() MutationResolver {
+	return &mutationResolver{r}
+}
+func (r *Resolver) Project() ProjectResolver {
+	return &projectResolver{r}
+}
+func (r *Resolver) Query() QueryResolver {
+	return &queryResolver{r}
+}
+func (r *Resolver) User() UserResolver {
+	return &userResolver{r}
+}
+
+type boardResolver struct{ *Resolver }
+
+func (r *boardResolver) ID(ctx context.Context, obj *Board) (int, error) {
+	panic("not implemented")
+}
+func (r *boardResolver) AuthorID(ctx context.Context, obj *Board) (int, error) {
+	panic("not implemented")
+}
+func (r *boardResolver) Status(ctx context.Context, obj *Board) (int, error) {
+	panic("not implemented")
+}
+
+type mutationResolver struct{ *Resolver }
+
+func (r *mutationResolver) CreateUser(ctx context.Context, input NewUser) (*User, error) {
+	panic("not implemented")
+}
+func (r *mutationResolver) UpdateUser(ctx context.Context, id int, input map[string]interface{}) (*User, error) {
+	panic("not implemented")
+}
+func (r *mutationResolver) Login(ctx context.Context, email string, password string) (*Token, error) {
+	panic("not implemented")
+}
+func (r *mutationResolver) Logout(ctx context.Context) (bool, error) {
+	panic("not implemented")
+}
+
+type projectResolver struct{ *Resolver }
+
+func (r *projectResolver) ID(ctx context.Context, obj *Project) (int, error) {
+	panic("not implemented")
+}
+func (r *projectResolver) AuthorID(ctx context.Context, obj *Project) (int, error) {
+	panic("not implemented")
+}
+func (r *projectResolver) Status(ctx context.Context, obj *Project) (int, error) {
+	panic("not implemented")
+}
+
+type queryResolver struct{ *Resolver }
+
+func (r *queryResolver) Users(ctx context.Context, filter Filter) ([]*User, error) {
+	panic("not implemented")
+}
+
+type userResolver struct{ *Resolver }
+
+func (r *userResolver) ID(ctx context.Context, obj *User) (int, error) {
+	panic("not implemented")
+}

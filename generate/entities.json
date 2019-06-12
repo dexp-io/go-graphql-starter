@@ -1,0 +1,130 @@
+[
+  {
+    "entity": "permission",
+    "table": "entity_permission",
+    "fields": [
+      {
+        "name": "grant_user_id",
+        "type": "int64"
+      },
+      {
+        "name": "grant_entity_id",
+        "type": "int64"
+      },
+      {
+        "name": "grant_entity_type",
+        "type": "string"
+      },
+      {
+        "name": "can_view",
+        "type": "bool"
+      },
+      {
+        "name": "can_insert",
+        "type": "bool"
+      },
+      {
+        "name": "can_update",
+        "type": "bool"
+      },
+      {
+        "name": "can_delete",
+        "type": "bool"
+      }
+    ]
+  },
+  {
+    "entity": "project",
+    "table": "entity_project",
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "body",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "entity": "board",
+    "table": "entity_board",
+    "fields": [
+      {
+        "name": "project_id",
+        "type": "int64"
+      },
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "weight",
+        "type": "int64"
+      }
+    ]
+  },
+  {
+    "entity": "room",
+    "table": "entity_room",
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "avatar_file_id",
+        "type": "int64"
+      }
+    ]
+  },
+  {
+    "entity": "project_member",
+    "table": "entity_project_member",
+    "fields": [
+      {
+        "name": "user_id",
+        "type": "int64"
+      },
+      {
+        "name": "project_id",
+        "type": "int64"
+      }
+    ]
+  },
+  {
+    "entity": "task",
+    "table": "entity_task",
+    "fields": [
+      {
+        "name": "parent_task_id",
+        "type": "int64"
+      },
+      {
+        "name": "assignee_user_id",
+        "type": "sql.NullInt64"
+      },
+      {
+        "name": "board_id",
+        "type": "int64"
+      },
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "body",
+        "type": "string"
+      },
+      {
+        "name": "weight",
+        "type": "int64"
+      },
+      {
+        "name": "due_date",
+        "type": "mysql.NullTime"
+      }
+    ]
+  }
+]
